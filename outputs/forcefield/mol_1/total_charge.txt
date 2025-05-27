@@ -1,0 +1,2 @@
+Total partial charge (integer part): 0
+Total partial charge (exact): -0.000000

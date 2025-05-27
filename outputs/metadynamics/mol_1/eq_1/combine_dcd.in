@@ -1,0 +1,9 @@
+parm ../system_2.prmtop
+
+# Load both parts
+trajin md_part1.dcd
+trajin md_part2.dcd
+
+# Output combined trajectory
+trajout md.dcd dcd
+
