@@ -1,0 +1,4 @@
+parm ../system_2.prmtop
+trajin md.dcd
+run
+

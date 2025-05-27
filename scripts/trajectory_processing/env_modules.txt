@@ -1,0 +1,4 @@
+module load amber/amber22
+module load openbabel/3.1.1
+module load boost/1.59.0
+module load rdkit

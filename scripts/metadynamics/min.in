@@ -1,0 +1,10 @@
+Energy minimization in explicit solvent
+ &cntrl
+  imin   = 1,      ! Perform energy minimization
+  maxcyc = 1000,   ! Maximum number of minimization cycles
+  ncyc   = 500,    ! Number of steepest descent cycles
+  ntb    = 1,      ! Constant volume periodic boundary conditions
+  cut    = 8.0,    ! Non-bonded cutoff (in Angstroms)
+  ntr    = 0,      ! No restraints
+  ntpr   = 1,      ! Print energy info every ntpr steps
+ /

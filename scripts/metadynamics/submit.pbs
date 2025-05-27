@@ -1,0 +1,19 @@
+#!/bin/bash
+#####  Constructed by kimbry #####
+#PBS -j oe
+#PBS -q gpu_moldyn
+#PBS -l select=ncpus=4:cloud_node_instance_type=g4dn.xlarge
+#PBS -N mol_INDEX
+#PBS -o mol_INDEX.out
+
+#####  Module commands #####
+module load amber/amber22
+
+#####  Job commands go below this line #####
+echo "Starting job at:" $(date)
+
+cd ${PBS_O_WORKDIR}
+bash 01run.sh > run.log
+
+echo "Finished processing $WORKDIR at:" $(date)
+

@@ -1,0 +1,23 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -q huge
+#PBS -l select=1:ncpus=1:hpcluster=True
+#PBS -N mol_INDEX
+#PBS -o mol_INDEX.out
+
+echo "Job started: $(date)"
+
+module purge
+module load amber/amber22
+
+cd "$PBS_O_WORKDIR" || exit
+
+bash ./01_copy_input_files.sh mol_INDEX
+bash ./02_generate_gasteiger_charges.sh
+bash ./03_organize_antechamber_files.sh
+bash ./04_compute_total_charge.sh
+bash ./05_run_antechamber_with_total_charge.sh
+bash ./06_generate_amber_inputs.sh
+
+echo "Job finished: $(date)"
+
