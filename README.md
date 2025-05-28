@@ -10,19 +10,19 @@ This repository provides a modular pipeline for predicting passive permeability 
 degrader-permeability-ml3d-metaD/
 ├── 01_run_forcefield.py              # Step 1: Launch force field jobs
 ├── 02_run_metadynamics.py           # Step 2: Launch WT-MetaD simulations
-├── 03_run_trajectory_processing.py  # Step 3: Extract ligand-only SDF
-├── 04_run_ani_exec.py               # Step 4: Run ANI-based descriptor jobs
-├── 05_run_ml_models.py              # Step 5: Generate datasets & train models
+├── 03_run_trajectory_processing.py  # Step 3: Extract ligand-only SDFs
+├── 04_run_ani_exec.py               # Step 4: Run ANI descriptor jobs
+├── 05_submit_ml_models.py           # Step 5: Submit regression models via PBS
 ├── data/                            # Input molecular data and descriptor scripts
-│   ├── 2d_features.csv              # Computed 2D descriptors
-│   ├── calculate_2d_properties.py   # Script to generate 2D descriptors
-│   ├── mol_1.pdb                    # Protonated 3D structure
-│   └── mol_data.csv                 # Metadata (optional)
-├── README.md                        # Documentation
+│   ├── 2d_features.csv              # Precomputed 2D descriptors
+│   ├── calculate_2d_properties.py   # Script to compute 2D descriptors
+│   ├── mol_1.pdb                    # Example input structure
+│   └── mol_data.csv                 # Optional metadata for molecules
+├── README.md                        # Project documentation
 ├── reset.sh                         # Cleanup script
-└── scripts/                         # Modular workflow components
-    ├── ani_exec/                    # ANI-based descriptor workflow
-    │   ├── 0_scripts/
+└── scripts/                         # Modular components for each workflow step
+    ├── ani_exec/                    # ANI-based descriptor calculation
+    │   ├── 0_scripts/               # Helper scripts for ANI execution
     │   │   ├── ani_job_setup.py
     │   │   ├── calculate_3d_descriptors.py
     │   │   ├── calculate_boltzmann_weights.py
@@ -37,7 +37,7 @@ degrader-permeability-ml3d-metaD/
     │       ├── prep.sh
     │       ├── run_ani.sh
     │       └── submit_ani.pbs
-    ├── forcefield/                  # AMBER parameterization workflow
+    ├── forcefield/                  # AMBER parameterization
     │   ├── 01_copy_input_files.sh
     │   ├── 02_generate_gasteiger_charges.sh
     │   ├── 03_organize_antechamber_files.sh
@@ -45,21 +45,40 @@ degrader-permeability-ml3d-metaD/
     │   ├── 05_run_antechamber_with_total_charge.sh
     │   ├── 06_generate_amber_inputs.sh
     │   └── submit.pbs
-    ├── metadynamics/                # Metadynamics job templates
+    ├── metadynamics/                # PLUMED-based WT-MetaD setup
     │   ├── 01run.sh
     │   ├── min.in
     │   ├── plumed.dat
     │   └── submit.pbs
-    ├── ml_models/                   # ML pipeline components
-    │   ├── generate_ml_datasets.py
-    │   ├── get_3d_properties.py
-    │   ├── run_all_models.sh
-    │   └── run_model.py
-    └── trajectory_processing/       # Post-MetaD ligand cleanup
+    ├── ml_models/                   # Regression modeling framework
+    │   ├── generate_pbs_jobs.py     # Creates PBS job files for model training
+    │   ├── get_3d_properties.py     # Generates CSV summary of 3D descriptors
+    │   └── run_model.py             # Executes a single model training run
+    └── trajectory_processing/       # Converts MetaD output to SDF
         ├── env_modules.txt
         ├── extract_sdf_from_md.sh
         └── frames_to_sdf.py
 
+```
+
+---
+
+## ♻️ Resetting the Workspace
+
+To restore example output files and reset the workspace, run:
+
+```bash
+bash reset.sh
+```
+
+This script clears the `outputs/` directory and replaces it with a fresh copy from `example_outputs/`:
+
+```bash
+#!/bin/bash
+
+rm -rf outputs
+
+cp -r example_outputs outputs
 ```
 
 ---
@@ -80,7 +99,8 @@ degrader-permeability-ml3d-metaD/
 
 ## Step 1: Force Field Generation (AMBER)
 
-⚠️ **Note:** You must manually edit the `submit.pbs` file in `scripts/forcefield/` to match your HPC environment (e.g., job name, queue, and modules).
+### ⚙️ Notes
+You must manually edit the `submit.pbs` file in `scripts/forcefield/` to match your HPC environment (e.g., job name, queue, and modules).
 
 To generate AMBER-compatible force field parameters for all molecules:
 
@@ -140,7 +160,7 @@ Each job directory is initialized from `scripts/metadynamics/` and includes:
 
 Trajectory files are saved and postprocessed using cpptraj.
 
-### ⚠️ Notes for Users
+### ⚙️ Notes
 
 - You **must manually edit** the `submit.pbs` file in both `scripts/forcefield/` and `scripts/metadynamics/` to suit your compute environment (e.g., queue names, resources, and module loads).
 - If you are using PLUMED and it is not on your system path, ensure it is properly referenced. For example, the following may be necessary in `01run.sh`:
@@ -178,7 +198,7 @@ outputs/trajectory_processing/mol_X/output.sdf
 
 These are used as input for ANI-based 3D descriptor extraction in the next step.
 
-### Notes for Users
+### ⚙️ Notes
 
 - Ensure you have `cpptraj` and `RDKit` installed and available in your environment.
 - If `cpptraj` requires additional shared libraries (e.g., LAPACK, OpenBLAS) that are not in standard system paths, you may need to manually set `LD_LIBRARY_PATH` in `extract_sdf_from_md.sh`. For example:
@@ -206,7 +226,7 @@ This will:
 
 All scripts are portable and modular to work per molecule.
 
-### ⚠️ Notes for Users
+### ⚙️ Notes
 
 - You **must manually edit** the following PBS submission templates:
 
@@ -222,7 +242,8 @@ All scripts are portable and modular to work per molecule.
 - Verify that the `run_ani_batch.sh` script points to the correct path for `run_ANI.py`:
 
   ```bash
-  ANI_PYTHON_SCRIPT="/SFS/project/kw/kimbry/rklake/smiles_to_ff/git/mrl-mi-ssf-torchani/scripts/run_ANI.py"
+  ANI_PYTHON_SCRIPT="/path/to/your/run_ANI.py"  # Replace with the actual path to run_ANI.py on your system
+
   ```
 
   If you move or clone the repo elsewhere, this path must be updated manually.
