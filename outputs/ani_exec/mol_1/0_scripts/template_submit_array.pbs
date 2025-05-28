@@ -1,0 +1,52 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -q huge
+#PBS -l select=1:ncpus=1:hpcluster=True
+#PBS -N chunk_array
+
+# Capture the start time
+START_TIME=$(date +%s)
+
+echo "Starting job at:" $(date)
+
+# Load necessary modules
+module purge
+module load merck_csc
+module load csc/python
+conda activate torchani
+module load openeye
+module load schrodinger
+
+# Read the input file for this task from runs.txt
+mapfile -t SDF_FILES < "${PBS_O_WORKDIR}/../runs.txt"
+INPUT_DIR="${SDF_FILES[$PBS_ARRAY_INDEX-1]}"
+
+echo "Processing: $INPUT_DIR"
+
+# Create and move into a unique temporary directory for this job
+TMP_DIR="${PBS_O_WORKDIR}/../chunks/chunk_${PBS_ARRAY_INDEX}"
+cd $TMP_DIR  # Change to the temporary directory
+
+# Define the solvent (can be passed dynamically)
+SOLVENT="ANI2x_SOLVENT"  # Placeholder for solvent, replace with "chloroform", "water", etc.
+
+# Execute bash command
+bash ../../../../0_scripts/run_ani_batch.sh ${PBS_ARRAY_INDEX} ${SOLVENT}
+
+echo "Finished processing $INPUT_DIR at:" $(date)
+
+# Capture the end time
+END_TIME=$(date +%s)
+
+# Compute total runtime
+TOTAL_TIME=$((END_TIME - START_TIME))
+
+# Calculate days, hours, minutes, and seconds
+DAYS=$((TOTAL_TIME / 86400))
+HOURS=$(( (TOTAL_TIME % 86400) / 3600 ))
+MINUTES=$(( (TOTAL_TIME % 3600) / 60 ))
+SECONDS=$((TOTAL_TIME % 60))
+
+# Display the total runtime in days, hours, minutes, and seconds
+echo "Total execution time: ${DAYS} days, ${HOURS} hours, ${MINUTES} minutes, and ${SECONDS} seconds"
+

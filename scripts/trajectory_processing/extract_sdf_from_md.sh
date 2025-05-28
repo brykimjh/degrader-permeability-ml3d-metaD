@@ -7,6 +7,11 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/kimbry/.conda/envs/lapack_env/lib
 MOLNAME=$(basename "$PWD")
 META_DIR="../../metadynamics/${MOLNAME}"
 
+cd "$META_DIR/eq_1"
+bash 02_combine_dcd.sh
+
+cd "../../../trajectory_processing/${MOLNAME}"
+
 # Copy required files
 cp "${META_DIR}/system_2.pdb" mol.pdb
 cp "${META_DIR}/system_2.prmtop" mol.prmtop

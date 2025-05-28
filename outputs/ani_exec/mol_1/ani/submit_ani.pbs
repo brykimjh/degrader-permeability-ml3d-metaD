@@ -1,0 +1,47 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -q huge
+#PBS -l select=1:ncpus=1:hpcluster=True
+#PBS -N ani_prop_calc
+#PBS -o ani_prop_calc.log
+
+# Capture the start time
+START_TIME=$(date +%s)
+
+echo "Starting job at:" $(date)
+
+# Load necessary modules
+module purge
+module load merck_csc
+module load csc/python
+conda activate torchani
+module load openeye
+module load schrodinger
+
+# Navigate to the directory from which the job was submitted
+cd $PBS_O_WORKDIR
+
+# Define the solvent (can be passed dynamically)
+SOLVENT="chloroform"  # Placeholder for solvent, replace with "chloroform", "water", etc.
+
+# Concatenate SDF files
+bash ../0_scripts/concatenate_sdf.sh
+
+# Call the bash script with the solvent argument
+bash run_ani.sh "$SOLVENT"
+
+# Capture the end time
+END_TIME=$(date +%s)
+
+# Compute total runtime
+TOTAL_TIME=$((END_TIME - START_TIME))
+
+# Calculate days, hours, minutes, and seconds
+DAYS=$((TOTAL_TIME / 86400))
+HOURS=$(( (TOTAL_TIME % 86400) / 3600 ))
+MINUTES=$(( (TOTAL_TIME % 3600) / 60 ))
+SECONDS=$((TOTAL_TIME % 60))
+
+# Display the total runtime in days, hours, minutes, and seconds
+echo "Total execution time: ${DAYS} days, ${HOURS} hours, ${MINUTES} minutes, and ${SECONDS} seconds"
+

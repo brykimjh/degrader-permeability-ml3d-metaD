@@ -1,0 +1,27 @@
+Starting job at: Wed May 28 16:29:12 EDT 2025
+Running command: python ../../run_model.py   --model svr   --features 3d   --csv ../../model_data.csv   --outdir .   --splits 100   --perm_repeats 10
+SVR:   0%|          | 0/100 [00:00<?, ?it/s]SVR:   3%|▎         | 3/100 [00:00<00:03, 28.29it/s]SVR:   7%|▋         | 7/100 [00:00<00:02, 33.28it/s]SVR:  12%|█▏        | 12/100 [00:00<00:02, 38.13it/s]SVR:  17%|█▋        | 17/100 [00:00<00:02, 40.01it/s]SVR:  22%|██▏       | 22/100 [00:00<00:01, 41.09it/s]SVR:  27%|██▋       | 27/100 [00:00<00:01, 41.36it/s]SVR:  32%|███▏      | 32/100 [00:00<00:01, 42.06it/s]SVR:  37%|███▋      | 37/100 [00:00<00:01, 42.71it/s]SVR:  42%|████▏     | 42/100 [00:01<00:01, 42.93it/s]SVR:  47%|████▋     | 47/100 [00:01<00:01, 43.17it/s]SVR:  52%|█████▏    | 52/100 [00:01<00:01, 42.56it/s]SVR:  57%|█████▋    | 57/100 [00:01<00:01, 40.57it/s]SVR:  62%|██████▏   | 62/100 [00:01<00:00, 39.30it/s]SVR:  67%|██████▋   | 67/100 [00:01<00:00, 41.21it/s]SVR:  72%|███████▏  | 72/100 [00:01<00:00, 42.83it/s]SVR:  77%|███████▋  | 77/100 [00:01<00:00, 43.82it/s]SVR:  82%|████████▏ | 82/100 [00:01<00:00, 44.64it/s]SVR:  87%|████████▋ | 87/100 [00:02<00:00, 45.26it/s]SVR:  92%|█████████▏| 92/100 [00:02<00:00, 45.49it/s]SVR:  97%|█████████▋| 97/100 [00:02<00:00, 41.58it/s]SVR: 100%|██████████| 100/100 [00:02<00:00, 41.37it/s]
+
+=== Final Summary ===
+R2                  : -0.0016 ± 0.4214
+RMSE                : 0.5759 ± 0.1074
+Pearson_r           : 0.4741 ± 0.1818
+Pearson_r2          : 0.2575 ± 0.1596
+ExplainedVariance   : 0.1721 ± 0.2081
+
+Saved all output files to: .
+Finished at: Wed May 28 16:29:19 EDT 2025
+Total runtime: 0 minutes, 7 seconds
+---------------- Molsys Job Epilogue -----------------
+ jobid = 8970726.ktchpcps002
+ jobname = svr_3d 
+ execution host = ktchpcpx316.merck.com 
+ account = null
+ user = kimbry
+ session ID = 43085
+ queue = huge
+ resource limits = mem=15gb,ncpus=1,nice=12,place=pack 
+ resource used = cpupercent=59,cput=00:00:07,mem=147696kb,ncpus=1,vmem=880792kb,walltime=00:00:11
+ job status = 0
+ nodefile = /var/spool/PBS/aux/8970726.ktchpcps002
+Pseudo-terminal will not be allocated because stdin is not a terminal.

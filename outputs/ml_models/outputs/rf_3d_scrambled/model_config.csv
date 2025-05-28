@@ -1,0 +1,2 @@
+model,features,scrambled,splits,test_size,n_components,n_estimators,max_depth,svr_C,svr_epsilon,perm_repeats
+rf,3d,True,100,0.5,NA,10,5,NA,NA,10

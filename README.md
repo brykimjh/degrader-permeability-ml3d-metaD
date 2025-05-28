@@ -4,7 +4,7 @@ This repository provides a modular pipeline for predicting passive permeability 
 
 ---
 
-## 📁 DProject Structure
+## Project Structure
 
 ```
 degrader-permeability-ml3d-metaD/
@@ -64,7 +64,7 @@ degrader-permeability-ml3d-metaD/
 
 ---
 
-## 🧪 Input Data
+## Input Data
 
 - `mol_data.csv`: Primary input file containing SMILES strings and any associated compound metadata.
 - `calculate_2d_properties.py`: Python script that computes 2D molecular descriptors using RDKit from `mol_data.csv`. Run with:
@@ -78,7 +78,7 @@ degrader-permeability-ml3d-metaD/
 
 ---
 
-## ⚙️ Step 1: Force Field Generation (AMBER)
+## Step 1: Force Field Generation (AMBER)
 
 ⚠️ **Note:** You must manually edit the `submit.pbs` file in `scripts/forcefield/` to match your HPC environment (e.g., job name, queue, and modules).
 
@@ -105,7 +105,7 @@ Each job executes the following scripts in order:
 
 ---
 
-## 🔄 Step 2: Metadynamics Simulation (External)
+## Step 2: Metadynamics Simulation (External)
 
 After generating force field parameters, metadynamics simulations are performed externally using AMBER and PLUMED (e.g., on AWS cloud infrastructure).
 
@@ -152,7 +152,7 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/YOUR_USERNAME/.conda/envs/lapack_e
 
 ---
 
-## 📊 Step 3: Trajectory Processing (Extract SDF from MetaD)
+## Step 3: Trajectory Processing (Extract SDF from MetaD)
 
 After metadynamics simulations are complete, we extract ligand-only structures and convert them to `.sdf` files for descriptor calculations.
 
@@ -178,7 +178,7 @@ outputs/trajectory_processing/mol_X/output.sdf
 
 These are used as input for ANI-based 3D descriptor extraction in the next step.
 
-### ⚠️ Notes for Users
+### Notes for Users
 
 - Ensure you have `cpptraj` and `RDKit` installed and available in your environment.
 - If `cpptraj` requires additional shared libraries (e.g., LAPACK, OpenBLAS) that are not in standard system paths, you may need to manually set `LD_LIBRARY_PATH` in `extract_sdf_from_md.sh`. For example:
@@ -188,7 +188,7 @@ These are used as input for ANI-based 3D descriptor extraction in the next step.
   ```
 ---
 
-## 🥚 Step 4: ANI-Based Descriptor Execution
+## Step 4: ANI-Based Descriptor Execution
 
 To perform ANI energy minimization and descriptor calculations using the `.sdf` files generated above:
 
@@ -229,56 +229,73 @@ All scripts are portable and modular to work per molecule.
 
 ---
 
-## 🧱 Step 5: Machine Learning Model Generation
+## Step 5: Machine Learning Model Training (Regression)
 
-After calculating both 2D and 3D descriptors, we build classification models to predict passive permeability classes (Low, Moderate, High).
+Train regression models to predict passive permeability using 2D, 3D, or combined molecular descriptors. The pipeline runs multiple models across different feature sets with optional label scrambling, using a provided dataset and PBS job submission.
 
-### 🎓 Descriptor and Target Dataset Generation
-To assemble the final input datasets for machine learning, run:
+### 📂 Input Data
 
-```bash
-python run_ml_models.py
+All models use the same input CSV:
+
+```
+example_outputs/ml_models/model_data.csv
 ```
 
-This will:
-- Copy all scripts from `scripts/ml_models/` to `outputs/ml_models/`
-- Execute `get_3d_properties.py` to collect ANI-derived 3D descriptors from each molecule folder
-- Run `generate_ml_datasets.py` to merge 2D and 3D descriptors and perform k-means classification on −log(Papp)
-- Create and save the following dataset variants:
-  - `datasets_classified/`: 2D-only, 3D-only, and combined descriptors, each labeled with class index (target = 0, 1, 2)
-  - `datasets_papp/`: 2D-only and combined descriptors using raw Papp values as the target
-  - `datasets_neglog/`: 2D-only and combined descriptors using −log(Papp) as the target
-  - `datasets_full/`: Combined descriptors with all original metadata (Index, Compound, Smiles, Papp, −log(Papp), class index, and label)
+This file contains:
 
-Each variant includes properly aligned descriptors and targets for modeling.
+* 2D molecular descriptors
+* 3D descriptors from ANI calculations
+* A continuous permeability target value (`P_appLog`)
 
-### 🎯 Model Training and Evaluation
+---
 
-Once datasets are generated, the following command trains models:
+### Running the Workflow
+
+To submit all model training jobs to a PBS cluster, run:
 
 ```bash
-bash run_all_models.sh
+python 05_submit_ml_models.py
 ```
 
-This script:
-- Trains a model using `run_model.py` for each `*_classified.csv` file
-- Uses Random Forest with:
-  - 5-fold cross-validation
-  - Feature selection via ANOVA F-score (`SelectKBest`)
-  - Top-k features specified per dataset
-- Logs the following to `outputs/ml_models/model_outputs/`:
-  - Model parameters (folds, seed, feature count)
-  - Accuracy metrics (mean and std of CV accuracy)
-  - CV predictions per fold
-  - Feature importance rankings
-  - Trained model (`.joblib` format)
+This script will:
 
-### ⚠️ Notes for Users
-- Ensure descriptor generation steps (1–4) are completed first.
-- Targets are created via k-means clustering on −log(Papp) to assign Low, Moderate, and High labels.
-- You may customize seeds, folds, or feature count (`k`) in `run_all_models.sh`.
+* Copy scripts to `outputs/ml_models/`
+* Regenerate 3D descriptor summary via `get_3d_properties.py`
+* Create PBS job files using `generate_pbs_jobs.py`
+* Submit jobs using `qsub`, one for each combination of:
 
-The machine learning workflow is fully automated and integrates directly with the descriptor generation pipeline.
+  * Model: `rf`, `svr`, `pls`
+  * Features: `2d`, `3d`, `combined`
+  * Scrambled or original targets (for comparison)
+
+Each job runs independently and stores results in:
+
+```
+outputs/ml_models/outputs/<model>_<features>[_scrambled]/
+```
+
+---
+
+### Output Files (per job folder)
+
+Each job directory includes:
+
+* `metrics.csv`: Per-split evaluation (R², RMSE, Pearson r, etc.)
+* `metrics_summary.csv`: Mean ± std of metrics across splits
+* `feature_importances.csv`: Permutation importance for each feature and split
+* `feature_importances_summary.csv`: Averaged importances across splits
+* `model_config.csv`: Parameters used for training
+* `submit.pbs`, `*.o*`: PBS job submission script and output log
+
+---
+
+### ⚙️ Notes
+
+* Model performance is evaluated using 100 randomized train/test splits (default).
+* Feature importance is estimated using permutation importance on the test set.
+* Scrambled-target versions provide baseline comparisons for signal significance.
+
+You can customize parameters like number of splits, test size, or model type by modifying `scripts/ml_models/generate_pbs_jobs.py` and `scripts/ml_models/run_model.py`.
 
 ---
 

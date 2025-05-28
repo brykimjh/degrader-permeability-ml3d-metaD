@@ -1,0 +1,18 @@
+Feature,MeanImportance
+Molecular Weight (MW),-0.022748560397640515
+CharVol (characteristic volume),-0.02529055327654001
+Flexibility (number of rotatable bonds / number of bonds),0.1376329343318843
+Number of Heavy Atoms (HA),-0.020602810477884106
+RingAtoms,-0.03972335246151262
+Halogens,-0.03517849953935072
+HeteroAtoms,-0.01893513404666279
+RotBonds (NRotB),0.03944179919106039
+AllBonds,-0.02412859156515002
+RingCount,-0.036262612834630545
+NumStereo,-0.011612238675140808
+Fraction of sp3 Carbon Atoms (FSP3),-0.09712475551492633
+Hydrogen Bond Donors (HBD),-0.019014199338463923
+Hydrogen Bond Acceptors (HBA),0.036258646026593164
+cLogD^7.4,0.03153782542603964
+Topological polar surface area (TPSA),-0.004137101479673627
+Total non-polar surface area (TNSA),-0.02401250430997294
