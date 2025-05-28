@@ -63,7 +63,7 @@ degrader-permeability-ml3d-metaD/
 
 ---
 
-## ♻️ Resetting the Workspace
+## Resetting the Workspace
 
 To restore example output files and reset the workspace, run:
 
@@ -254,7 +254,7 @@ All scripts are portable and modular to work per molecule.
 
 Train regression models to predict passive permeability using 2D, 3D, or combined molecular descriptors. The pipeline runs multiple models across different feature sets with optional label scrambling, using a provided dataset and PBS job submission.
 
-### 📂 Input Data
+### Input Data
 
 All models use the same input CSV:
 
