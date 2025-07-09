@@ -95,6 +95,25 @@ cp -r example_outputs outputs
 - `2d_features.csv`: Generated 2D descriptor table (used in downstream ML modeling).
 - `mol_1.pdb`: Example protonated 3D structure, prepared externally (e.g., Schrödinger Epik at pH 7.4). These serve as input for force field parameterization and metadynamics setup.
 
+## `data/3d_confs/` Directory
+
+This folder contains per-molecule 3D conformers and descriptor outputs, indexed by molecule ID `N`.
+
+### File Types
+
+- `N.sdf`  
+  The 10 lowest-energy conformers extracted from ANI-refined metadynamics trajectories.
+
+- `N_3d-descriptors.csv`  
+  Ensemble-averaged 3D shape descriptors computed over 10,000 conformers.  
+  Includes: Asphericity, Eccentricity, Inertial Shape Factor, NPR1, NPR2, PMI1–3, Radius of Gyration, Spherocity Index.
+
+- `N_3d-psa.csv`  
+  Polar surface area (PSA) values for each of the 10,000 conformers.
+
+- `N_imhb.csv`  
+  Intramolecular hydrogen bond (IMHB) counts and pairings for each of the 10,000 conformers.
+
 ---
 
 ## Step 1: Force Field Generation (AMBER)
