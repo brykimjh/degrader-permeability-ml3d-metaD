@@ -141,7 +141,7 @@ The following files are transferred from each `outputs/forcefield/mol_X/` direct
 Metadynamics jobs are launched using:
 
 ```bash
-python run_metadynamics.py
+python 02_run_metadynamics.py
 ```
 
 Each job directory is initialized from `scripts/metadynamics/` and includes:
@@ -179,7 +179,7 @@ After metadynamics simulations are complete, we extract ligand-only structures a
 Run:
 
 ```bash
-python run_trajectory_processing.py
+python 03_run_trajectory_processing.py
 ```
 
 This script does the following for each molecule:
@@ -213,8 +213,8 @@ These are used as input for ANI-based 3D descriptor extraction in the next step.
 To perform ANI energy minimization and descriptor calculations using the `.sdf` files generated above:
 
 ```bash
-python run_ani_exec.py 1  # Step 1: Setup and submit jobs
-python run_ani_exec.py 2  # Step 2: Run descriptor property extraction
+python 04_run_ani_exec.py 1  # Step 1: Setup and submit jobs
+python 04_run_ani_exec.py 2  # Step 2: Run descriptor property extraction
 ```
 
 This will:
