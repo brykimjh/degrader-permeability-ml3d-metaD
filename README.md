@@ -13,14 +13,20 @@ degrader-permeability-ml3d-metaD/
 ├── 03_run_trajectory_processing.py  # Step 3: Extract ligand-only SDFs
 ├── 04_run_ani_exec.py               # Step 4: Run ANI descriptor jobs
 ├── 05_submit_ml_models.py           # Step 5: Submit regression models via PBS
-├── data/                            # Input molecular data and descriptor scripts
+├── data/                            # Input molecular data and precomputed features
+│   ├── 3d_confs/                    # Precomputed 3D conformers and descriptors
+│   │   ├── N.sdf                    # Top 10 lowest-energy ANI-refined conformers (per molecule)
+│   │   ├── N_3d-descriptors.csv     # Ensemble-averaged 3D shape descriptors (from 10k conformers)
+│   │   ├── N_3d-psa.csv             # PSA values per conformer
+│   │   └── N_imhb.csv               # IMHB counts and pairings per conformer
 │   ├── 2d_features.csv              # Precomputed 2D descriptors
-│   ├── calculate_2d_properties.py   # Script to compute 2D descriptors
-│   ├── mol_1.pdb                    # Example input structure
-│   └── mol_data.csv                 # Optional metadata for molecules
+│   ├── calculate_2d_properties.py   # Script to compute 2D descriptors from SMILES
+│   ├── mol_1.pdb                    # Example input structure (protonated)
+│   └── mol_data.csv                 # Molecule list and metadata (e.g., SMILES, labels)
 ├── README.md                        # Project documentation
-├── reset.sh                         # Cleanup script
+├── reset.sh                         # Workspace cleanup script
 └── scripts/                         # Modular components for each workflow step
+
     ├── ani_exec/                    # ANI-based descriptor calculation
     │   ├── 0_scripts/               # Helper scripts for ANI execution
     │   │   ├── ani_job_setup.py
