@@ -1,5 +1,0 @@
-chunks/chunk_1/chunk_1.sdf
-chunks/chunk_2/chunk_2.sdf
-chunks/chunk_3/chunk_3.sdf
-chunks/chunk_4/chunk_4.sdf
-chunks/chunk_5/chunk_5.sdf

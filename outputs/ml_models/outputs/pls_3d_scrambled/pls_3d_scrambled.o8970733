@@ -1,27 +1,0 @@
-Starting job at: Wed May 28 16:29:15 EDT 2025
-Running command: python ../../run_model.py   --model pls   --features 3d   --csv ../../model_data.csv   --outdir .   --splits 100   --perm_repeats 10 --scrambled
-PLS:   0%|          | 0/100 [00:00<?, ?it/s]PLS:   3%|▎         | 3/100 [00:00<00:03, 24.63it/s]PLS:   7%|▋         | 7/100 [00:00<00:03, 27.81it/s]PLS:  10%|█         | 10/100 [00:00<00:03, 28.64it/s]PLS:  14%|█▍        | 14/100 [00:00<00:02, 29.38it/s]PLS:  18%|█▊        | 18/100 [00:00<00:02, 30.29it/s]PLS:  22%|██▏       | 22/100 [00:00<00:02, 30.19it/s]PLS:  26%|██▌       | 26/100 [00:00<00:02, 29.91it/s]PLS:  29%|██▉       | 29/100 [00:00<00:02, 29.41it/s]PLS:  33%|███▎      | 33/100 [00:01<00:02, 30.13it/s]PLS:  37%|███▋      | 37/100 [00:01<00:02, 30.78it/s]PLS:  41%|████      | 41/100 [00:01<00:01, 31.37it/s]PLS:  45%|████▌     | 45/100 [00:01<00:01, 31.58it/s]PLS:  49%|████▉     | 49/100 [00:01<00:01, 30.67it/s]PLS:  53%|█████▎    | 53/100 [00:01<00:01, 30.73it/s]PLS:  57%|█████▋    | 57/100 [00:01<00:01, 30.91it/s]PLS:  61%|██████    | 61/100 [00:02<00:01, 30.80it/s]PLS:  65%|██████▌   | 65/100 [00:02<00:01, 28.25it/s]PLS:  68%|██████▊   | 68/100 [00:02<00:01, 17.78it/s]PLS:  72%|███████▏  | 72/100 [00:02<00:01, 20.59it/s]PLS:  75%|███████▌  | 75/100 [00:02<00:01, 21.04it/s]PLS:  78%|███████▊  | 78/100 [00:02<00:00, 22.76it/s]PLS:  82%|████████▏ | 82/100 [00:03<00:00, 25.51it/s]PLS:  86%|████████▌ | 86/100 [00:03<00:00, 27.60it/s]PLS:  90%|█████████ | 90/100 [00:03<00:00, 28.43it/s]PLS:  94%|█████████▍| 94/100 [00:03<00:00, 29.40it/s]PLS:  98%|█████████▊| 98/100 [00:03<00:00, 30.67it/s]PLS: 100%|██████████| 100/100 [00:03<00:00, 27.81it/s]
-
-=== Final Summary ===
-R2                  : -1.0892 ± 2.0634
-RMSE                : 0.7785 ± 0.2086
-Pearson_r           : -0.0255 ± 0.2497
-Pearson_r2          : 0.0624 ± 0.0844
-ExplainedVariance   : -0.7849 ± 1.6428
-
-Saved all output files to: .
-Finished at: Wed May 28 16:29:24 EDT 2025
-Total runtime: 0 minutes, 9 seconds
----------------- Molsys Job Epilogue -----------------
- jobid = 8970733.ktchpcps002
- jobname = pls_3d_scrambled 
- execution host = ktchpcpx029.merck.com 
- account = null
- user = kimbry
- session ID = 18798
- queue = huge
- resource limits = mem=15gb,ncpus=1,nice=12,place=pack 
- resource used = cpupercent=36,cput=00:00:09,mem=149060kb,ncpus=1,vmem=913352kb,walltime=00:00:14
- job status = 0
- nodefile = /var/spool/PBS/aux/8970733.ktchpcps002
-Pseudo-terminal will not be allocated because stdin is not a terminal.
