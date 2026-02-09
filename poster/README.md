@@ -30,3 +30,7 @@ Copies of this poster obtained via the Quick Response (QR) Code or the web link 
 Bryant Kim  
 LinkedIn: https://www.linkedin.com/in/bryant-kim-1aba7522b  
 GitHub: https://github.com/brykimjh/degrader-permeability-ml3d-metaD
+
+## Poster PDF
+**Download the poster:**  
+https://raw.githubusercontent.com/brykimjh/degrader-permeability-ml3d-metaD/main/ACS_Spring_2026_Poster.pdf
