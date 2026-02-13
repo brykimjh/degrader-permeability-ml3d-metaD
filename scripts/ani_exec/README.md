@@ -1,0 +1,2 @@
+ANI Backend Note
+The run_ANI.py script referenced in this workflow is not included in the public repository. It was an internal wrapper around a solvent-adapted ANI-2x implementation used for geometry optimization and energy evaluation. This step can be replaced with any backend that generates optimized geometries and conformer energies written to SDF and CSV formats (e.g., ANI implementations, QM packages, or other ML potentials). The workflow only requires consistent geometries and relative conformer energies for Boltzmann weighting.

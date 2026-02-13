@@ -47,6 +47,12 @@ done
 
 echo "Split completed. $((count - 1)) molecules saved to '$SPLIT_DIR'."
 
+# NOTE:
+# The original run_ANI.py referenced here was an internal wrapper around
+# a solvent-adapted ANI-2x implementation and is not distributed publicly.
+# This call can be replaced with any backend that performs geometry
+# optimization and outputs conformer energies in SDF and CSV format.
+
 # Python script and model for ANI processing
 ANI_PYTHON_SCRIPT="/SFS/project/kw/kimbry/rklake/smiles_to_ff/git/mrl-mi-ssf-torchani/scripts/run_ANI.py"
 MODEL="ANI2x_${SOLVENT}"
