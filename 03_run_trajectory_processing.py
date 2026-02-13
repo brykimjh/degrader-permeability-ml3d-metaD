@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 
-nmol = 1  # Set this to however many molecules you have
+nmol = 29  # Set this to however many molecules you have
 
 TEMPLATE_DIR = "scripts/trajectory_processing"
 OUTPUT_ROOT = "outputs/trajectory_processing"
@@ -28,10 +28,21 @@ for i in range(1, nmol + 1):
         else:
             shutil.copy2(src, dest)
 
-    # Run extract_sdf_from_md.sh in the molecule folder
     try:
-        subprocess.run(["bash", "extract_sdf_from_md.sh"], cwd=mol_dir, check=True)
-        print(f"✅ output.sdf created in {mol_dir}")
-    except subprocess.CalledProcessError:
-        print(f"❌ Failed to generate output.sdf for {mol_name}")
+        # Original local execution (kept but commented out)
+#        subprocess.run(["bash", "extract_sdf_from_md.sh"], cwd=mol_dir, check=True)
+#        print(f"✅ output.sdf created in {mol_dir}")
 
+        # Replace INDEX inside submit.pbs
+        subprocess.run(
+            ["sed", "-i", f"s/INDEX/{i}/", "submit.pbs"],
+            cwd=mol_dir,
+            check=True
+        )
+
+        # Submit via PBS
+        subprocess.run(["qsub", "submit.pbs"], cwd=mol_dir, check=True)
+        print(f"✅ Job submitted for {mol_name}")
+
+    except subprocess.CalledProcessError:
+        print(f"❌ Failed for {mol_name}")

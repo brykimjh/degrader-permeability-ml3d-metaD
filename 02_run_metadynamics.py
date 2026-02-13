@@ -36,5 +36,5 @@ for i in range(1, nmol + 1):
 
     # Submit the job
     print(f"Submitting job for {mol_name}")
-    subprocess.run(["qsub", "submit.pbs"], cwd=mol_dir)
+#    subprocess.run(["qsub", "submit.pbs"], cwd=mol_dir)
 

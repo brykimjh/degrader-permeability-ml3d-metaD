@@ -1,0 +1,33 @@
+#!/bin/bash
+#PBS -j oe
+#PBS -q huge
+#PBS -l select=1:ncpus=1:hpcluster=True
+#PBS -N mol_INDEX
+#PBS -o cp_INDEX.log
+
+# Capture the start time
+START_TIME=$(date +%s)
+
+echo "Starting job at:" $(date)
+cd $PBS_O_WORKDIR
+
+module load amber/amber22
+source ~/github/clone/full/sfl-env2/bin/activate
+
+bash extract_sdf_from_md.sh
+
+# Capture the end time
+END_TIME=$(date +%s)
+
+# Compute total runtime
+TOTAL_TIME=$((END_TIME - START_TIME))
+
+# Calculate days, hours, minutes, and seconds
+DAYS=$((TOTAL_TIME / 86400))
+HOURS=$(( (TOTAL_TIME % 86400) / 3600 ))
+MINUTES=$(( (TOTAL_TIME % 3600) / 60 ))
+SECONDS=$((TOTAL_TIME % 60))
+
+# Display the total runtime in days, hours, minutes, and seconds
+echo "Total execution time: ${DAYS} days, ${HOURS} hours, ${MINUTES} minutes, and ${SECONDS} seconds"
+

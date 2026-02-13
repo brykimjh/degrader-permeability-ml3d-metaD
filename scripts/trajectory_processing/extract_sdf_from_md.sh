@@ -8,7 +8,7 @@ MOLNAME=$(basename "$PWD")
 META_DIR="../../metadynamics/${MOLNAME}"
 
 cd "$META_DIR/eq_1"
-bash 02_combine_dcd.sh
+#bash 02_combine_dcd.sh
 
 cd "../../../trajectory_processing/${MOLNAME}"
 
@@ -25,9 +25,9 @@ parm mol.prmtop
 trajin ${META_DIR}/eq_1/md.dcd
 trajin ${META_DIR}/eq_2/md.dcd
 reference mol.pdb [ref]
-center :MOL mass origin
+center :1 mass origin
 image origin center familiar
-strip !:MOL
+strip !:1
 trajout frames.pdb pdb
 EOF
 
@@ -38,7 +38,7 @@ cpptraj amber_script.in > amber_script.log
 python frames_to_sdf.py
 
 # Clean up
-rm -f mol.pdb mol.prmtop frames.pdb amber_script.in
+#rm -f mol.pdb mol.prmtop frames.pdb amber_script.in
 
 echo "✅ output.sdf created in $(pwd)"
 
