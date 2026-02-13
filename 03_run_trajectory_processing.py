@@ -2,7 +2,7 @@ import os
 import shutil
 import subprocess
 
-nmol = 29  # Set this to however many molecules you have
+nmol = 1  # Set this to however many molecules you have
 
 TEMPLATE_DIR = "scripts/trajectory_processing"
 OUTPUT_ROOT = "outputs/trajectory_processing"
