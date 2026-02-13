@@ -99,7 +99,7 @@ cp -r example_outputs outputs
   ```
 
 - `2d_features.csv`: Generated 2D descriptor table (used in downstream ML modeling).
-- `mol_1.pdb`: Example protonated 3D structure, prepared externally (e.g., Schrödinger Epik at pH 7.4). These serve as input for force field parameterization and metadynamics setup.
+- `mol_1.pdb`:  Example protonated 3D structure prepared externally (e.g., Schrödinger Epik at pH 7.4); any reasonable 3D structure generation method is acceptable, provided the geometry and protonation state are consistent for force field parameterization and metadynamics setup.
 
 ## `data/3d_confs/` Directory
 
