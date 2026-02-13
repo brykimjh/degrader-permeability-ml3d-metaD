@@ -3,8 +3,8 @@
 stem_1="system_1"
 
 cp lig.mol2 ${stem_1}.mol2
-cp lig.frcmod ${stem_1}.frcmod
 
+parmchk2 -i ${stem_1}.mol2 -f mol2 -o ${stem_1}.frcmod -s gaff2
 cat <<EOF > "leap_${stem_1}.in"
 source leaprc.protein.ff14SB
 source leaprc.gaff2

@@ -3,21 +3,36 @@
 #PBS -q huge
 #PBS -l select=1:ncpus=1:hpcluster=True
 #PBS -N mol_INDEX
-#PBS -o mol_INDEX.out
+#PBS -o mol_INDEX.log
 
-echo "Job started: $(date)"
+# Capture the start time
+START_TIME=$(date +%s)
 
-module purge
+echo "Starting job at:" $(date)
+cd $PBS_O_WORKDIR
+
 module load amber/amber22
+source ~/github/clone/full/sfl-env2/bin/activate
 
-cd "$PBS_O_WORKDIR" || exit
+bash 00_reset.sh mol_INDEX
+python rdkit_chg.py
+rm -rf pdb
+mkdir pdb
+mv ligand.pdb ligand_fixed.mol pdb
+bash run.sh
 
-bash ./01_copy_input_files.sh mol_INDEX
-bash ./02_generate_gasteiger_charges.sh
-bash ./03_organize_antechamber_files.sh
-bash ./04_compute_total_charge.sh
-bash ./05_run_antechamber_with_total_charge.sh
-bash ./06_generate_amber_inputs.sh
+# Capture the end time
+END_TIME=$(date +%s)
 
-echo "Job finished: $(date)"
+# Compute total runtime
+TOTAL_TIME=$((END_TIME - START_TIME))
+
+# Calculate days, hours, minutes, and seconds
+DAYS=$((TOTAL_TIME / 86400))
+HOURS=$(( (TOTAL_TIME % 86400) / 3600 ))
+MINUTES=$(( (TOTAL_TIME % 3600) / 60 ))
+SECONDS=$((TOTAL_TIME % 60))
+
+# Display the total runtime in days, hours, minutes, and seconds
+echo "Total execution time: ${DAYS} days, ${HOURS} hours, ${MINUTES} minutes, and ${SECONDS} seconds"
 
