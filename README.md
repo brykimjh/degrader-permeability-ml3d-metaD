@@ -4,6 +4,21 @@ This repository provides a modular pipeline for predicting passive permeability 
 
 ---
 
+## Associated Publication
+
+This repository accompanies the published work:
+
+**Enhancing Permeability Prediction of Heterobifunctional Degraders Using Machine Learning and Metadynamics-Informed 3D Molecular Descriptors**
+Kim, B.; *et al.*
+*Journal of Chemical Information and Modeling* (2025)
+https://pubs.acs.org/doi/10.1021/acs.jcim.5c01600
+
+<p align="center">
+  <img src="assets/abstract_figure.png" width="750">
+</p>
+
+---
+
 ## Project Structure
 
 ```
