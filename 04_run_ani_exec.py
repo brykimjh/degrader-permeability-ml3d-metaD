@@ -2,6 +2,20 @@ import os
 import argparse
 
 # Define configurable parameters
+# Job splitting:
+# total_frames_per_molecule = frames_per_job * num_jobs
+#
+# Example:
+#   1 molecule, 15 frames total
+#   → 5 frames/job × 3 jobs = 15 frames
+#
+# Typical production:
+#   10,000 frames/molecule
+#   → 100 frames/job × 100 jobs = 10,000 frames
+#
+# If nmol = 30:
+#   30 molecules × 100 jobs = 3,000 total jobs
+
 solvent = 'chloroform'
 nmol = 1
 output_file = "../data/output.sdf"
