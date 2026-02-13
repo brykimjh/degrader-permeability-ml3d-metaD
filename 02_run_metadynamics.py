@@ -36,5 +36,9 @@ for i in range(1, nmol + 1):
 
     # Submit the job
     print(f"Submitting job for {mol_name}")
+
+    # Job submission is commented out because execution has been moved to AWS.
+    # After preparing the metadynamics directories and input files locally,
+    # the folders are SCP’d to AWS and run in parallel on Tesla T4 GPUs.
 #    subprocess.run(["qsub", "submit.pbs"], cwd=mol_dir)
 
