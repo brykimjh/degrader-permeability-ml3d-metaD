@@ -9,7 +9,7 @@ header = [
     "Ensemble_Average_RadiusOfGyration_Chloroform_ANI"
 ]
 
-number_of_molecules = 32
+number_of_molecules = 29
 base_dir = "../ani_exec"
 rows = []
 
@@ -25,9 +25,13 @@ for i in range(1, number_of_molecules + 1):
         continue
 
     try:
-        psa = extract_value(os.path.join(mol_dir, "ensemble_avg_psa.txt"))
-        imhb = extract_value(os.path.join(mol_dir, "ensemble_avg_num_imhb.txt"))
-        rgyr = extract_value(os.path.join(mol_dir, "ensemble_avg_rgyr.txt"))
+#        psa = extract_value(os.path.join(mol_dir, "ensemble_avg_psa.txt"))
+#        imhb = extract_value(os.path.join(mol_dir, "ensemble_avg_num_imhb.txt"))
+#        rgyr = extract_value(os.path.join(mol_dir, "ensemble_avg_rgyr.txt"))
+        analysis_dir = os.path.join(mol_dir, "ani", "analysis")
+        psa = extract_value(os.path.join(analysis_dir, "ensemble_avg_psa.txt"))
+        imhb = extract_value(os.path.join(analysis_dir, "ensemble_avg_num_imhb.txt"))
+        rgyr = extract_value(os.path.join(analysis_dir, "ensemble_avg_rgyr.txt"))
         rows.append([i, psa, imhb, rgyr])
     except Exception as e:
         print(f"⚠️  Failed to parse mol_{i}: {e}")

@@ -1,7 +1,9 @@
 import os
 
-models = ["rf", "svr", "pls"]
-features = ["2d", "3d", "combined"]
+#models = ["rf", "svr", "pls"]
+#features = ["2d", "3d", "combined"]
+models = ["pls"]
+features = ["3d"]
 scrambled_opts = [False, True]
 
 template_path = "model_template.pbs"

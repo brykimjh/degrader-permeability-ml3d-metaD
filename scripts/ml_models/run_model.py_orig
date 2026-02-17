@@ -97,16 +97,20 @@ def evaluate_model(model_type, features, y, outdir,
         importances = result.importances_mean
         feature_rows.append(dict(zip(["Split"] + feature_names, [i] + list(importances))))
 
+    # Save metrics
     df_metrics = pd.DataFrame(metric_rows)
     df_metrics.to_csv(os.path.join(outdir, "metrics.csv"), index=False)
 
+    # Save summary metrics
     df_summary_metrics = df_metrics.drop(columns="Split").agg(["mean", "std"]).T.reset_index()
     df_summary_metrics.columns = ["Metric", "Mean", "StdDev"]
     df_summary_metrics.to_csv(os.path.join(outdir, "metrics_summary.csv"), index=False)
 
+    # Save permutation importances
     df_features = pd.DataFrame(feature_rows)
     df_features.to_csv(os.path.join(outdir, "feature_importances.csv"), index=False)
 
+    # Save summary importances
     df_long = df_features.melt(id_vars="Split", var_name="Feature", value_name="Importance")
     df_summary_importances = (
         df_long
@@ -117,10 +121,11 @@ def evaluate_model(model_type, features, y, outdir,
     )
     df_summary_importances.to_csv(os.path.join(outdir, "feature_importances_summary.csv"), index=False)
 
+    # Save config
     df_config = pd.DataFrame([model_args_for_config])
     df_config.to_csv(os.path.join(outdir, "model_config.csv"), index=False)
 
-    print("\n=== Final Summary ===")
+    print(f"\n=== Final Summary ===")
     for _, row in df_summary_metrics.iterrows():
         print(f"{row['Metric']:<20}: {row['Mean']:.4f} ± {row['StdDev']:.4f}")
     print(f"\nSaved all output files to: {outdir}")
@@ -141,10 +146,6 @@ if __name__ == "__main__":
     parser.add_argument("--svr_C", type=float, default=1.0)
     parser.add_argument("--svr_epsilon", type=float, default=0.1)
     parser.add_argument("--perm_repeats", type=int, default=10)
-
-    # ✅ NEW
-    parser.add_argument("--predict_csv", default=None)
-
     args = parser.parse_args()
 
     outdir = args.outdir
@@ -154,48 +155,6 @@ if __name__ == "__main__":
     X = df[feature_sets[args.features]]
 
     svr_params = {"kernel": "rbf", "C": args.svr_C, "epsilon": args.svr_epsilon}
-
-    # ==========================
-    # ✅ PREDICTION MODE
-    # ==========================
-    if args.predict_csv is not None:
-
-        if args.model in ["pls", "svr"]:
-            scaler = StandardScaler()
-            X_scaled = scaler.fit_transform(X)
-        else:
-            scaler = None
-            X_scaled = X
-
-        if args.model == "pls":
-            model = PLSRegression(n_components=args.n_components)
-        elif args.model == "svr":
-            model = SVR(kernel="rbf", C=args.svr_C, epsilon=args.svr_epsilon)
-        elif args.model == "rf":
-            model = RandomForestRegressor(
-                n_estimators=args.n_estimators,
-                max_depth=args.max_depth,
-                random_state=42
-            )
-
-        model.fit(X_scaled, y)
-
-        df_unknown = pd.read_csv(args.predict_csv)
-        X_unknown = df_unknown[feature_sets[args.features]]
-
-        if scaler is not None:
-            X_unknown = scaler.transform(X_unknown)
-
-        preds = model.predict(X_unknown)
-        df_unknown["Predicted_P_appLog"] = preds
-        df_unknown.to_csv(os.path.join(outdir, "predictions.csv"), index=False)
-
-        print("Saved predictions to predictions.csv")
-        exit()
-
-    # ==========================
-    # VALIDATION MODE (original)
-    # ==========================
 
     model_args_for_config = {
         "model": args.model,
@@ -226,3 +185,4 @@ if __name__ == "__main__":
         perm_repeats=args.perm_repeats,
         model_args_for_config=model_args_for_config
     )
+

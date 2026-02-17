@@ -7,6 +7,8 @@ CC = f'''\
 cp scripts/ml_models/* {ml_models_dir}
 cd {ml_models_dir}
 python get_3d_properties.py
+python make_unknowns.py
+tail -n +2 new_unknowns.csv >> unknowns.csv
 rm -rf outputs pbs_jobs
 mkdir outputs
 python generate_pbs_jobs.py
