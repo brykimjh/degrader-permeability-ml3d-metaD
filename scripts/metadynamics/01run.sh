@@ -8,7 +8,9 @@ sed -i "s/NATOMS/${number}/g" plumed.dat
 ############
 
 unset LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/kimbry/.conda/envs/lapack_env/lib
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/SFS/project/kimbry/PLUMED_SOURCE/lapack_env/lib
+export PLUMED_KERNEL=/SFS/project/kimbry/PLUMED_SOURCE/plumed/lib/libplumedKernel.so
+
 
 stem_1="system_1"
 
