@@ -19,7 +19,8 @@ echo "Total charge read successfully: Charge=$charge."
 
 # Step 1: Re-generate ligand files using Antechamber and Parmchk2
 echo "Re-generating ligand files using Antechamber and Parmchk2..."
-antechamber -i $ligand_pdb -fi pdb -o lig.mol2 -fo mol2 -c bcc -s 2 -nc $charge -at gaff2
+#antechamber -i $ligand_pdb -fi pdb -o lig.mol2 -fo mol2 -c bcc -s 2 -nc $charge -at gaff2
+antechamber -i $ligand_pdb -fi pdb -o lig.mol2 -fo mol2 -c gas -s 2 -nc $charge -at gaff2
 parmchk2 -i lig.mol2 -f mol2 -o lig.frcmod -a Y
 
 if [ $? -ne 0 ]; then
