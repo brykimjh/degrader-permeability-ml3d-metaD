@@ -1,0 +1,13 @@
+To get lapack_env:
+conda create -p /SFS/project/kimbry/PLUMED_SOURCE/lapack_env     -c conda-forge     python=3.8     fftw     openblas
+
+To get plumed:
+wget https://github.com/plumed/plumed2/releases/download/v2.9.0/plumed-src-2.9.0.tgz
+tar -zxvf plumed-src-2.9.0.tgz
+cd plumed-2.9.0
+
+module load gcc/10.3.0
+
+./configure --prefix=/SFS/project/kimbry/PLUMED_SOURCE/plumed
+make -j4
+make install
