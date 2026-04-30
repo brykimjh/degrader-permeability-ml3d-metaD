@@ -12,7 +12,8 @@ echo "Starting job at:" $(date)
 cd $PBS_O_WORKDIR
 
 module load amber/amber22
-source ~/github/clone/full/sfl-env2/bin/activate
+source /SFS/project/kw/kimbry/venvs/sfl-env3/bin/activate
+module load rdkit/2020.09.1
 
 bash extract_sdf_from_md.sh
 
