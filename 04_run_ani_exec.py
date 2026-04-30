@@ -41,7 +41,7 @@ os.system("module list")
 # Step 1: Single-point energy calculations and ANI minimization
 if args.step == 1:
     # Prompt the user to verify if RDKit is loaded
-    rdkit_loaded = input("Is the RDKit module loaded? (yes/no): ").strip().lower()
+    rdkit_loaded = input("Is the RDKit module (rdkit/2025.3.3) loaded? (yes/no): ").strip().lower()
     if rdkit_loaded != 'yes':
         print("RDKit module is not loaded. Exiting...")
         exit(1)
