@@ -66,28 +66,35 @@ for input_file in "$SPLIT_DIR"/*.sdf; do
   output_sdf="$OUTPUT_DIR/${base_name}_optimized.sdf"
   output_csv="$OUTPUT_DIR/${base_name}_optimized.csv"
   log_file="$OUTPUT_DIR/${base_name}_run.log"
+  
+  # Run the Python command with timeout (10 minutes = 600 seconds)
+  TIME_LIMIT=600
 
-  # Run the Python command
   echo "Processing $input_file..."
-  python "$ANI_PYTHON_SCRIPT" \
+  timeout $TIME_LIMIT python "$ANI_PYTHON_SCRIPT" \
     -model "$MODEL" \
     -input "$input_file" \
     -output_sdf "$output_sdf" \
     -output_csv "$output_csv" \
     > "$log_file" 2>&1
 
-  # Check if the Python script ran successfully
-  if [[ $? -eq 0 ]]; then
+  status=$?
+
+  # Check result
+  if [[ $status -eq 0 ]]; then
     echo "Successfully processed $input_file. Results saved to $output_sdf and $output_csv."
+  elif [[ $status -eq 124 ]]; then
+    echo "Timeout reached for $input_file. Skipping..."
+    continue
   else
     echo "Error processing $input_file. Running single-point optimization on original SDF file..."
-    python "$ANI_PYTHON_SCRIPT" \
+    timeout $TIME_LIMIT python "$ANI_PYTHON_SCRIPT" \
       -model "$MODEL" \
       -input "$input_file" \
       -output_sdf "$output_sdf" \
       -output_csv "$output_csv" \
       -single_point \
-      > "$log_file" 2>&1
+      >> "$log_file" 2>&1
 
     if [[ $? -eq 0 ]]; then
       echo "Single-point optimization successful for $input_file. Results saved to $output_sdf and $output_csv."
